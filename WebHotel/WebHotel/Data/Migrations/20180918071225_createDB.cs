@@ -102,6 +102,7 @@ namespace WebHotel.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            //sqlite not support this
             /*
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserTokens_AspNetUsers_UserId",
