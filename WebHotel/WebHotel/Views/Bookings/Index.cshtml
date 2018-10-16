@@ -12,20 +12,23 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CheckIn)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CheckOut)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Cost)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckIn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckOut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.TheCustomer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TheRoom)
+                @Html.DisplayNameFor(model => model.RoomID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TheRoom.Level)
             </th>
             <th></th>
         </tr>
@@ -44,6 +47,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TheCustomer.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TheRoom.Level)
