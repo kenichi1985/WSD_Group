@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using WebHotel.Data;
 using WebHotel.Models;
@@ -20,9 +22,77 @@ namespace WebHotel.Controllers
         }
 
         // GET: Bookings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(String sortOrder)
         {
-            var applicationDbContext = _context.Booking.Include(b => b.TheCustomer).Include(b => b.TheRoom);
+
+            if (String.IsNullOrEmpty(sortOrder))
+            {
+                // When the Index page is loaded for the first time, the sortOrder is empty.
+                // By default, the booking should be displayed in surname_asc.
+                sortOrder = "surname_asc";
+            }
+
+            // Prepare the query for getting the entire list of purchase.
+            // Convert the data type from DbSet<Purchase> to IQueryable<Purchase>
+            var bookings = (IQueryable<Booking>)_context.Booking;
+
+            // Sort the movies by specified order
+            switch (sortOrder)
+            {
+                case "surname_asc":
+                    bookings = bookings.OrderBy(b => b.TheCustomer.Surname);
+                    break;
+                case "surname_desc":
+                    bookings = bookings.OrderByDescending(b => b.TheCustomer.Surname);
+                    break;
+                case "givenName_asc":
+                    bookings = bookings.OrderBy(b => b.TheCustomer.GivenName);
+                    break;
+                case "givenName_desc":
+                    bookings = bookings.OrderByDescending(b => b.TheCustomer.GivenName);
+                    break;
+                case "room_asc":
+                    bookings = bookings.OrderBy(b => b.RoomID);
+                    break;
+                case "room_desc":
+                    bookings = bookings.OrderByDescending(b => b.RoomID);
+                    break;
+                case "checkIn_asc":
+                    bookings = bookings.OrderBy(b => b.CheckIn);
+                    break;
+                case "checkIn_desc":
+                    bookings = bookings.OrderByDescending(b => b.CheckIn);
+                    break;
+                case "checkOut_asc":
+                    bookings = bookings.OrderBy(b => b.CheckOut);
+                    break;
+                case "checkOut_desc":
+                    bookings = bookings.OrderByDescending(b => b.CheckOut);
+                    break;
+                case "cost_asc":
+                    bookings = bookings.OrderBy(b => b.Cost);
+                    break;
+                case "cost_desc":
+                    bookings = bookings.OrderByDescending(b => b.Cost);
+                    break;
+            }
+
+            // Deciding query string (sortOrder=xxx) to include in heading links for pizza name, qty of pizza and total respectively.
+            // They specify the next display order if a heading link is clicked. 
+            // Store them in ViewData dictionary to pass them to View.
+            ViewData["SortSurname"] = sortOrder != "surname_asc" ? "surname_asc" : "surname_desc";
+            ViewData["SortGivenName"] = sortOrder != "givenName_asc" ? "givenName_asc" : "givenName_desc";
+            ViewData["SortRoom"] = sortOrder != "room_asc" ? "room_asc" : "room_desc";
+            ViewData["SortCheckIn"] = sortOrder != "checkIn_asc" ? "checkIn_asc" : "checkIn_desc";
+            ViewData["SortCheckOut"] = sortOrder != "checkOut_asc" ? "checkOut_asc" : "checkOut_desc";
+            ViewData["SortCost"] = sortOrder != "cost_asc" ? "cost_asc" : "cost_desc";
+
+            // retrieve the logged-in user's email
+            string _email = User.FindFirst(ClaimTypes.Name).Value;
+
+            var loginedCustomer = bookings.Where(b => b.CustomerEmail.Equals(_email));
+
+            var applicationDbContext = loginedCustomer.Include(b => b.TheCustomer).Include(b => b.TheRoom);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -49,7 +119,8 @@ namespace WebHotel.Controllers
         // GET: Bookings/Create
         public IActionResult Create()
         {
-            ViewData["CustomerEmail"] = new SelectList(_context.Customer, "Email", "Email");
+            string _email = User.FindFirst(ClaimTypes.Name).Value;
+            ViewData["CustomerEmail"] = _email;
             ViewData["RoomID"] = new SelectList(_context.Room, "ID", "ID");
             return View();
         }
@@ -59,13 +130,44 @@ namespace WebHotel.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,RoomID,CustomerEmail,CheckIn,CheckOut,Cost")] Booking booking)
+        public async Task<IActionResult> Create(Booking booking)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(booking);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                var selectedRoom = new SqliteParameter("RoomID", booking.RoomID);
+                var checkInDate = new SqliteParameter("checkInDate", booking.CheckIn);
+                var checkOutDate = new SqliteParameter("checkOutDate", booking.CheckOut);
+
+
+                string query = $"SELECT * FROM Booking " +
+                    $"WHERE RoomID = @RoomID AND " +
+                    $"(@checkInDate BETWEEN CheckIn AND CheckOut OR " +
+                    $"@checkOutDate BETWEEN CheckIn AND CheckOut OR " +
+                    $"(@checkInDate <= CheckIn AND @checkOutDate >= CheckOut))";
+
+                var result = await _context.Booking.FromSql(query, selectedRoom, checkInDate, checkOutDate).ToListAsync();
+
+                if (result.Count() == 0)
+                {
+                    var newBooking = new Booking
+                    {
+                        ID = booking.ID,
+                        RoomID = booking.RoomID,
+                        CustomerEmail = booking.CustomerEmail,
+                        CheckIn = booking.CheckIn,
+                        CheckOut = booking.CheckOut
+                    };
+                    _context.Add(newBooking);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    return View(booking);
+                }
             }
             ViewData["CustomerEmail"] = new SelectList(_context.Customer, "Email", "Email", booking.CustomerEmail);
             ViewData["RoomID"] = new SelectList(_context.Room, "ID", "ID", booking.RoomID);

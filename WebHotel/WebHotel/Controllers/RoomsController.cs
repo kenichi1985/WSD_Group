@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebHotel.Data;
 using WebHotel.Models;
+using WebHotel.Models.RoomAvailabilityViewModels;
+using Microsoft.Data.Sqlite;
 
 namespace WebHotel.Controllers
 {
@@ -20,9 +22,34 @@ namespace WebHotel.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Room.ToListAsync());
+        public async Task<IActionResult> Index(RoomAvailability searchRoom)
+        {   
+            var rooms = (IQueryable<Room>)_context.Room;
+
+            var a =searchRoom;
+            if (searchRoom.BedCount != 0)
+            {
+
+                var numOfRoom = new SqliteParameter("numOfRoom", searchRoom.BedCount);
+                var checkInDate = new SqliteParameter("checkInDate", searchRoom.CheckIn);
+                var checkOutDate = new SqliteParameter("checkOutDate", searchRoom.CheckOut);
+
+
+                string query = $"SELECT * FROM Room r WHERE BedCount = @numOfRoom " +
+                 $"AND NOT EXISTS (SELECT 1 FROM Booking b WHERE b.RoomID = r.ID " +
+                 $"AND (@checkInDate BETWEEN b.CheckIn AND b.CheckOut " +
+                 $"OR @checkOutDate BETWEEN b.CheckIn AND b.CheckOut " +
+                 $"OR (@checkInDate <= b.CheckIn AND @checkOutDate >= b.CheckOut)))";
+
+
+
+                var result = await _context.Room.FromSql(query, numOfRoom, checkInDate, checkOutDate).ToListAsync();
+
+                return View(result);
+
+            }
+
+            return View(await rooms.ToListAsync());
         }
 
         // GET: Rooms/Details/5
