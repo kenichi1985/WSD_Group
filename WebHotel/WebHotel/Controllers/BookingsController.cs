@@ -132,6 +132,9 @@ namespace WebHotel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Booking booking)
         {
+            ViewBag.Success = null;
+            ViewBag.Message = "";
+
             if (ModelState.IsValid)
             {
 
@@ -139,6 +142,7 @@ namespace WebHotel.Controllers
                 var checkInDate = new SqliteParameter("checkInDate", booking.CheckIn);
                 var checkOutDate = new SqliteParameter("checkOutDate", booking.CheckOut);
 
+                var theCustomer = await _context.Customer.FindAsync(booking.CustomerEmail);
 
                 string query = $"SELECT * FROM Booking " +
                     $"WHERE RoomID = @RoomID AND " +
@@ -152,21 +156,39 @@ namespace WebHotel.Controllers
                 {
                     var newBooking = new Booking
                     {
-                        ID = booking.ID,
+                        
                         RoomID = booking.RoomID,
                         CustomerEmail = booking.CustomerEmail,
                         CheckIn = booking.CheckIn,
                         CheckOut = booking.CheckOut
                     };
+
+
+                    //calculate the total
+
+                    int totalDay = (booking.CheckOut - booking.CheckIn).Days;
+
+                    var theRoom = await _context.Room.FindAsync(booking.RoomID);
+
+                    var totalCost = theRoom.Price * totalDay;
+
+                    newBooking.Cost = totalCost;
                     _context.Add(newBooking);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction(nameof(Index));
+                    ViewBag.Message = "The room is successfully booked. Room Level: "+theRoom.Level+" Check in date: "+booking.CheckIn+" Check out date "+booking.CheckOut+" Cost: "+totalCost;
+                    ViewBag.Success = true;
+                    return View(booking);
                 }
 
                 else
                 {
-                    return View(booking);
+                    // for displaying confirmation
+
+                    ViewBag.Message = "Sorry, the room is not available";
+
+                    ViewBag.Success = false;
+                    return View();
                 }
             }
             ViewData["CustomerEmail"] = new SelectList(_context.Customer, "Email", "Email", booking.CustomerEmail);
