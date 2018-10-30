@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.Sqlite;
@@ -20,7 +21,7 @@ namespace WebHotel.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Bookings
         public async Task<IActionResult> Index(String sortOrder)
         {
@@ -90,12 +91,21 @@ namespace WebHotel.Controllers
             // retrieve the logged-in user's email
             string _email = User.FindFirst(ClaimTypes.Name).Value;
 
-            var loginedCustomer = bookings.Where(b => b.CustomerEmail.Equals(_email));
+            var loggedInCustomer = bookings.Where(b => b.CustomerEmail.Equals(_email));
+            
+       
+               var applicationDbContext = loggedInCustomer.Include(b => b.TheCustomer).Include(b => b.TheRoom);
 
-            var applicationDbContext = loginedCustomer.Include(b => b.TheCustomer).Include(b => b.TheRoom);
+            if (_email == "admin@wsh.com")
+            {
+                 applicationDbContext = _context.Booking.Include(b => b.TheCustomer).Include(b => b.TheRoom);
+
+
+            }
+
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize]
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -115,7 +125,7 @@ namespace WebHotel.Controllers
 
             return View(booking);
         }
-
+        [Authorize]
         // GET: Bookings/Create
         public IActionResult Create()
         {
@@ -128,6 +138,7 @@ namespace WebHotel.Controllers
         // POST: Bookings/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Booking booking)
@@ -217,6 +228,7 @@ namespace WebHotel.Controllers
         // POST: Bookings/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,RoomID,CustomerEmail,CheckIn,CheckOut,Cost")] Booking booking)

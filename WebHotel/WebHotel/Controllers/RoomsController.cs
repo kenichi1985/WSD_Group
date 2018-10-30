@@ -9,6 +9,7 @@ using WebHotel.Data;
 using WebHotel.Models;
 using WebHotel.Models.RoomAvailabilityViewModels;
 using Microsoft.Data.Sqlite;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebHotel.Controllers
 {
@@ -20,7 +21,7 @@ namespace WebHotel.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Rooms
         public async Task<IActionResult> Index(RoomAvailability searchRoom)
         {   
@@ -69,7 +70,7 @@ namespace WebHotel.Controllers
 
             return View(room);
         }
-
+        [Authorize]
         // GET: Rooms/Create
         public IActionResult Create()
         {
@@ -79,6 +80,7 @@ namespace WebHotel.Controllers
         // POST: Rooms/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Level,BedCount,Price")] Room room)
@@ -91,7 +93,7 @@ namespace WebHotel.Controllers
             }
             return View(room);
         }
-
+        [Authorize]
         // GET: Rooms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -111,6 +113,7 @@ namespace WebHotel.Controllers
         // POST: Rooms/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Level,BedCount,Price")] Room room)
