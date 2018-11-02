@@ -94,12 +94,11 @@ namespace WebHotel.Controllers
             var loggedInCustomer = bookings.Where(b => b.CustomerEmail.Equals(_email));
             
        
-               var applicationDbContext = loggedInCustomer.Include(b => b.TheCustomer).Include(b => b.TheRoom);
+            var applicationDbContext = loggedInCustomer.Include(b => b.TheCustomer).Include(b => b.TheRoom);
 
             if (_email == "admin@wsh.com")
             {
                  applicationDbContext = _context.Booking.Include(b => b.TheCustomer).Include(b => b.TheRoom);
-
 
             }
 
@@ -187,7 +186,11 @@ namespace WebHotel.Controllers
                     _context.Add(newBooking);
                     await _context.SaveChangesAsync();
 
-                    ViewBag.Message = "The room is successfully booked. Room Level: "+theRoom.Level+" Check in date: "+booking.CheckIn+" Check out date "+booking.CheckOut+" Cost: "+totalCost;
+                    ViewBag.Message = "The room is successfully booked.";
+                    ViewBag.Message2 = "Room Level: " + theRoom.Level;
+                    ViewBag.Message3 = "Check in date: " + booking.CheckIn;
+                    ViewBag.Message4 = "Check out date: " + booking.CheckOut;
+                    ViewBag.Message5 = "Cost: $" + totalCost;
                     ViewBag.Success = true;
                     return View(booking);
                 }
