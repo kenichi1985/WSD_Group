@@ -21,7 +21,7 @@ namespace WebHotel.Controllers
         {
             _context = context;
         }
-        [Authorize]
+        [Authorize (Roles ="Customers")]
         // GET: Rooms
         public async Task<IActionResult> Index(RoomAvailability searchRoom)
         {   

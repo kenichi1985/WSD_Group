@@ -10,6 +10,7 @@ namespace WebHotel.Models
     {
         [Key]
         public int ID { get; set; }
+        [Display(Name="Room ID")]
         public int RoomID { get; set; }
         [DataType(DataType.EmailAddress)]
         public string CustomerEmail {get;set;}

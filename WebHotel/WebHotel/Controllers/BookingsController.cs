@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using WebHotel.Data;
 using WebHotel.Models;
+using WebHotel.Models.StatisticsViewModels;
 
 namespace WebHotel.Controllers
 {
@@ -33,8 +33,8 @@ namespace WebHotel.Controllers
                 sortOrder = "surname_asc";
             }
 
-            // Prepare the query for getting the entire list of purchase.
-            // Convert the data type from DbSet<Purchase> to IQueryable<Purchase>
+            // Prepare the query for getting the entire list of Booking.
+            // Convert the data type from DbSet<Booking> to IQueryable<Booking>
             var bookings = (IQueryable<Booking>)_context.Booking;
 
             // Sort the movies by specified order
@@ -104,6 +104,26 @@ namespace WebHotel.Controllers
             }
 
             return View(await applicationDbContext.ToListAsync());
+        }
+        [Authorize(Roles ="Administrators")]
+        public async Task<IActionResult> CalcBedCountStats()
+        {
+            var bookingsGroup = _context.Booking.Include(p => p.TheRoom).GroupBy(b=>b.TheRoom.BedCount);
+           
+            var bedCountStats = bookingsGroup.Select( b=> new CalcBedCountStats { BedCount= b.Key, NoOfBookings = b.Count() });
+            return View(await bedCountStats.ToListAsync());
+        }
+        [Authorize(Roles = "Administrators")]
+        public async Task<IActionResult> CalcRoomIDStats()
+        {
+            var bookingsGroup = _context.Booking.GroupBy(b => b.RoomID);
+
+            var roomIDStats = bookingsGroup.Select(b => new CalcRoomIDStats { RoomID = b.Key, NoOfBookings = b.Count() });
+            return View(await roomIDStats.ToListAsync());
+        }
+        [Authorize(Roles = "Administrators")]
+        public async Task<IActionResult> Statistics() {
+            return View();
         }
         [Authorize]
         // GET: Bookings/Details/5
@@ -206,7 +226,7 @@ namespace WebHotel.Controllers
             ViewData["RoomID"] = new SelectList(_context.Room, "ID", "ID", booking.RoomID);
             return View(booking);
         }
-
+        
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

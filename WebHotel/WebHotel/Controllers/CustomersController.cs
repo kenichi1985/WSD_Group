@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebHotel.Data;
 using WebHotel.Models;
-
+using WebHotel.Models.StatisticsViewModels;
 namespace WebHotel.Controllers
 {
     public class CustomersController : Controller
@@ -43,6 +44,7 @@ namespace WebHotel.Controllers
 
             return View(customer);
         }
+        [Authorize]
         // GET: Customers/Details/5
         public async Task<IActionResult> MyDetails()
         {
@@ -64,6 +66,7 @@ namespace WebHotel.Controllers
         // POST: Purchases/MyDetailsCreate
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MyDetailsCreate([Bind("Email,Surname,GivenName,Postcode")] Customer customer)
@@ -81,6 +84,7 @@ namespace WebHotel.Controllers
         // POST: Purchases/MyDetailsCreate
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MyDetailsUpdate([Bind("Email,Surname,GivenName,Postcode")] Customer customer)
@@ -94,7 +98,13 @@ namespace WebHotel.Controllers
             }
             return View(customer);
         }
-
+        [Authorize (Roles ="Administrators")]
+        public async Task<IActionResult> CalcPostcodeStats()
+        {
+            var postcodeGroups = _context.Customer.GroupBy(b => b.Postcode);
+            var postcodeStats = postcodeGroups.Select(g => new CalcPostcodeStats { PostcodeOfCustomer = g.Key, NoOfCustomer = g.Count() });
+            return View(await postcodeStats.ToListAsync());
+        }
         // GET: Customers/Create
         public IActionResult Create()
         {

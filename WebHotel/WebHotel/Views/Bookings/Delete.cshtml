@@ -12,6 +12,36 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.DisplayNameFor(model => model.TheRoom.ID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TheRoom.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TheRoom.Level)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TheRoom.Level)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TheRoom.BedCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TheRoom.BedCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TheCustomer.Surname)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TheCustomer.Surname)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TheCustomer.GivenName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TheCustomer.GivenName)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.CheckIn)
         </dt>
         <dd>
@@ -29,23 +59,12 @@
         <dd>
             @Html.DisplayFor(model => model.Cost)
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.TheCustomer)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TheCustomer.Email)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.TheRoom)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TheRoom.Level)
-        </dd>
+     
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <input type="submit" value="Delete Confirmation" class="btn btn-default" /> |
         <a asp-action="Index">Back to List</a>
     </form>
 </div>

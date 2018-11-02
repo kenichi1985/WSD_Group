@@ -9,6 +9,7 @@ namespace WebHotel.Models
     public class Room
     {
         [Key]
+        [Range(1,16)]
         public int ID { get; set; }
         [Required]
         [RegularExpression(@"^[G123]$", ErrorMessage = "Only accepct G, 1, 2 or 3 ")]
