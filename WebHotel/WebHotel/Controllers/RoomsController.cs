@@ -11,6 +11,7 @@ using WebHotel.Models.RoomAvailabilityViewModels;
 using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Authorization;
 
+
 namespace WebHotel.Controllers
 {
     public class RoomsController : Controller
@@ -26,8 +27,22 @@ namespace WebHotel.Controllers
         public async Task<IActionResult> Index(RoomAvailability searchRoom)
         {   
             var rooms = (IQueryable<Room>)_context.Room;
+            ViewData["GreatherThan"] = null;
+            ViewData["Passed"] = null;
 
-            var a =searchRoom;
+
+            if (searchRoom.CheckOut.Date < searchRoom.CheckIn.Date){
+
+                ViewData["GreatherThan"] = "The check out date earlier than check in date";
+                return View(searchRoom);
+            }
+
+            if(searchRoom.CheckIn.Date < DateTime.Today && searchRoom.CheckIn.Date != DateTime.MinValue.Date)
+            {
+                ViewData["Passed"] = "The check in date already passed";
+                return View(searchRoom);
+            }
+
             if (searchRoom.BedCount != 0)
             {
 
@@ -43,15 +58,20 @@ namespace WebHotel.Controllers
                  $"OR (@checkInDate <= b.CheckIn AND @checkOutDate >= b.CheckOut)))";
 
 
+                ViewBag.Result = await _context.Room.FromSql(query, numOfRoom, checkInDate, checkOutDate).Select(r => new Room { ID = r.ID, BedCount = r.BedCount, Level = r.Level, Price = r.Price }).ToListAsync();
+                //var result = await _context.Room.FromSql(query, numOfRoom, checkInDate, checkOutDate).ToListAsync();
 
-                var result = await _context.Room.FromSql(query, numOfRoom, checkInDate, checkOutDate).ToListAsync();
+                //ViewBag.Result = await _context.Room.FromSql(query, numOfRoom, checkInDate, checkOutDate).ToListAsync();
 
-                return View(result);
+                return View(searchRoom);
+                //return View(result);
 
             }
 
-            return View(await rooms.ToListAsync());
+            return View(searchRoom);
         }
+
+
 
         // GET: Rooms/Details/5
         public async Task<IActionResult> Details(int? id)

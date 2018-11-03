@@ -38,12 +38,14 @@
                 <li><a asp-area="" asp-controller="Bookings" asp-action="Create">Book A Room</a></li>
                 <li><a asp-area="" asp-controller="Bookings"asp-action="Index">My Bookings</a></li>
 }
-                    @if (User.IsInRole("Administrators"))
-    {
-                <li>><a asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings </a></li>
-                <li>><a asp-area="" asp-controller="Bookings" asp-action="Statistics">Statistics</a></li>
 
-}
+                    
+
+                    @if (User.IsInRole("Administrators"))
+                    {
+                        <li>><a asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings </a></li>
+                        <li>><a asp-area="" asp-controller="Bookings" asp-action="Statistics">Statistics</a></li>
+                    }
 
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
