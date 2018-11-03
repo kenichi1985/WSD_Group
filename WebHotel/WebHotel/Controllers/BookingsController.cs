@@ -28,8 +28,7 @@ namespace WebHotel.Controllers
 
             if (String.IsNullOrEmpty(sortOrder))
             {
-                // When the Index page is loaded for the first time, the sortOrder is empty.
-                // By default, the booking should be displayed in surname_asc.
+                
                 sortOrder = "surname_asc";
             }
 
@@ -37,7 +36,7 @@ namespace WebHotel.Controllers
             // Convert the data type from DbSet<Booking> to IQueryable<Booking>
             var bookings = (IQueryable<Booking>)_context.Booking;
 
-            // Sort the movies by specified order
+          
             switch (sortOrder)
             {
                 case "surname_asc":
@@ -78,7 +77,7 @@ namespace WebHotel.Controllers
                     break;
             }
 
-            // Deciding query string (sortOrder=xxx) to include in heading links for pizza name, qty of pizza and total respectively.
+           
             // They specify the next display order if a heading link is clicked. 
             // Store them in ViewData dictionary to pass them to View.
             ViewData["SortSurname"] = sortOrder != "surname_asc" ? "surname_asc" : "surname_desc";
