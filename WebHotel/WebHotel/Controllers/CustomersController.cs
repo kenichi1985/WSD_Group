@@ -98,13 +98,7 @@ namespace WebHotel.Controllers
             }
             return View(customer);
         }
-        [Authorize (Roles ="Administrators")]
-        public async Task<IActionResult> CalcPostcodeStats()
-        {
-            var postcodeGroups = _context.Customer.GroupBy(b => b.Postcode);
-            var postcodeStats = postcodeGroups.Select(g => new CalcPostcodeStats { PostcodeOfCustomer = g.Key, NoOfCustomer = g.Count() });
-            return View(await postcodeStats.ToListAsync());
-        }
+        
         // GET: Customers/Create
         public IActionResult Create()
         {

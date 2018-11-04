@@ -6,12 +6,98 @@
 <h2>Statistics</h2>
 
 <div>
-    <li><a asp-area="" asp-controller="Customers" asp-action="CalcPostcodeStats">Customer Distribution with respect to postcodes </a></li>
-  
+    <h2>Customer Distribution with respect to postcodes </h2>
+    <br />
+    <div>
+    <table class="table">
+        <!-- .table is a Bootstrap class giving table styles -->
+        <tr>
+            <th>
+                Postcode
+            </th>
+            <th>
+                Number of Bookings
+            </th>
+        </tr>
+
+        @foreach (var item in ViewBag.PostcodeStats)
+        {
+            <tr>
+                <td>
+                    @item.PostcodeOfCustomer
+                </td>
+                <td>
+                    @item.NoOfCustomer
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+</div>
+
+<div>
+    <h2>Booking Distribution with respect to Room ID </h2>>
+
+    <h2></h2>
+    <br />
+
+    <div>
+        <table class="table">
+            <!-- .table is a Bootstrap class giving table styles -->
+            <tr>
+                <th>
+                    RoomID
+                </th>
+                <th>
+                    Number of Bookings
+                </th>
+            </tr>
+
+            @foreach (var item in ViewBag.RoomIDStats)
+            {
+                <tr>
+                    <td>
+                        @item.RoomID
+                    </td>
+                    <td>
+                        @item.NoOfBookings
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
 </div>
 <div>
-    <li><a asp-area="" asp-controller="Bookings" asp-action="CalcRoomIDStats">Booking Distribution with respect to Room ID </a></li>
+    <h2>Booking Distribution with respect to Bed Count</h2>
+
+    <br/>
+
+    <div>
+        <table class="table">
+            <!-- .table is a Bootstrap class giving table styles -->
+            <tr>
+                <th>
+                    Bed Count
+                </th>
+                <th>
+                    Number of Bookings
+                </th>
+            </tr>
+
+            @foreach (var item in ViewBag.BedCountStats)
+            {
+                <tr>
+                    <td>
+                        @item.BedCount
+                    </td>
+                    <td>
+                        @item.NoOfBookings
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
 </div>
-<div>
-    <li><a asp-area="" asp-controller="Bookings" asp-action="CalcBedCountStats">Booking Distribution with respect to Bed Count </a></li>
-</div>
+
