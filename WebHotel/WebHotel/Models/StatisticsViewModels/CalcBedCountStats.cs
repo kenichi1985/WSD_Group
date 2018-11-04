@@ -9,7 +9,7 @@ namespace WebHotel.Models.StatisticsViewModels
     public class CalcBedCountStats
     {
         [Key]
-        [Display(Name = "BedCount")]
+        [Display(Name = "Number of Bed")]
         public int BedCount { get; set; }
         [Display(Name = "Number of Bookings")]
         public int NoOfBookings { get; set; }
