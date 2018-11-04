@@ -1,7 +1,5 @@
 ﻿@model WebHotel.Models.RoomAvailabilityViewModels.RoomAvailability
 
-@*@model IEnumerable<WebHotel.Models.Room>*@
-
 
 @{
     ViewData["Title"] = "Index";
@@ -24,14 +22,15 @@
 
     </div>
     <div class="form-group">
-        <label class="control-label">Check In Date:</label>
-        <input type="date" name="CheckIn" class="form-control" />
-        <span class="alert-danger">@ViewData["Passed"]</span>
+        <label asp-for="CheckIn" class="control-label"></label>
+        <input asp-for="CheckIn" class="form-control" />
+        <span asp-validation-for="CheckIn" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label class="control-label">Check Out Date(s):</label>
-        <input type="date" name="CheckOut" class="form-control" />
-        <span class="alert-danger">@ViewData["GreatherThan"]</span>
+        <label asp-for="CheckOut" class="control-label"></label>
+        <input asp-for="CheckOut" class="form-control" />
+        <span asp-validation-for="CheckOut" class="text-danger"></span>
+
     </div>
     <div class="form-group">
         <input type="submit" value="Search" class="btn" />

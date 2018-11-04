@@ -9,7 +9,7 @@ namespace WebHotel.Models.StatisticsViewModels
     public class CalcPostcodeStats
     {
         [Key]
-        [Display(Name = "Postcode of Customers ")]
+        [Display(Name = "Customer's Postcode")]
         public string PostcodeOfCustomer { get; set; }
         [Display(Name = "Number of Customers ")]
         public int NoOfCustomer { get; set; }
