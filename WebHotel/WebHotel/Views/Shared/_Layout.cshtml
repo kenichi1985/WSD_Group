@@ -32,7 +32,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     @if (User.IsInRole("Customers"))
-<<<<<<< HEAD
+
 
                       {
                 <li><a asp-area="" asp-controller="Customers" asp-action="MyDetails">My Details</a></li>
@@ -40,14 +40,14 @@
                 <li><a asp-area="" asp-controller="Bookings" asp-action="Create">Book A Room</a></li>
                 <li><a asp-area="" asp-controller="Bookings"asp-action="Index">My Bookings</a></li>
                        }
-=======
+
                      {
                         <li><a asp-area="" asp-controller="Customers" asp-action="MyDetails">My Details</a></li>
                         <li><a asp-area="" asp-controller="Rooms" asp-action="Index">Search Rooms</a></li>
                         <li><a asp-area="" asp-controller="Bookings" asp-action="Create">Book A Room</a></li>
                         <li><a asp-area="" asp-controller="Bookings"asp-action="Index">My Bookings</a></li>
                      }
->>>>>>> origin/Staging
+
 
                     @if (User.IsInRole("Administrators"))
                     {
