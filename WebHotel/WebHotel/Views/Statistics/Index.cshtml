@@ -9,41 +9,41 @@
     <h2>Customer Distribution with respect to postcodes </h2>
     <br />
     <div>
-    <table class="table">
-        <!-- .table is a Bootstrap class giving table styles -->
-        <tr>
-            <th>
-                Postcode
-            </th>
-            <th>
-                Number of Bookings
-            </th>
-        </tr>
-
-        @foreach (var item in ViewBag.PostcodeStats)
-        {
+        <table class="table">
+        
             <tr>
-                <td>
-                    @item.PostcodeOfCustomer
-                </td>
-                <td>
-                    @item.NoOfCustomer
-                </td>
+                <th>
+                    Postcode
+                </th>
+                <th>
+                    Number of Bookings
+                </th>
             </tr>
-        }
-    </table>
-</div>
+
+            @foreach (var item in ViewBag.PostcodeStats)
+            {
+                <tr>
+                    <td>
+                        @item.PostcodeOfCustomer
+                    </td>
+                    <td>
+                        @item.NoOfCustomer
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
 </div>
 
 <div>
-    <h2>Booking Distribution with respect to Room ID </h2>>
+    <h2>Booking Distribution with respect to Room ID </h2>
 
     <h2></h2>
     <br />
 
     <div>
         <table class="table">
-            <!-- .table is a Bootstrap class giving table styles -->
+            
             <tr>
                 <th>
                     RoomID
@@ -75,7 +75,7 @@
 
     <div>
         <table class="table">
-            <!-- .table is a Bootstrap class giving table styles -->
+
             <tr>
                 <th>
                     Bed Count

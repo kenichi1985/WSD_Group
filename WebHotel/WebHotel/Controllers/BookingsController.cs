@@ -105,28 +105,7 @@ namespace WebHotel.Controllers
         }
        
       
-        [Authorize(Roles = "Administrators")]
-        public async Task<IActionResult> Statistics(CalcPostcodeStats postcodeStats, CalcRoomIDStats roomIDStats, CalcBedCountStats bedCountStats) {
-            var roomGroup = _context.Booking.GroupBy(b => b.RoomID);
-            // booking Group for roomIDStats
-            //ViewBag for storing RoomID statistics 
-            ViewBag.RoomIDStats = await roomGroup.Select(b => new CalcRoomIDStats { RoomID = b.Key, NoOfBookings = b.Count() }).ToListAsync();
-
-
-            var postcodeGroups = _context.Customer.GroupBy(b => b.Postcode); // booking group for postcode statistic function 
-            //ViewBag for storing postcode statistics  
-            ViewBag.postcodeStats = await postcodeGroups.Select(g => new CalcPostcodeStats { PostcodeOfCustomer = g.Key, NoOfCustomer = g.Count() }).ToListAsync();
-
-
-            // booking Group for roomIDStats
-            var bookingsGroup = _context.Booking.Include(p => p.TheRoom).GroupBy(b => b.TheRoom.BedCount);
-            //ViewBag for Room ID Stats 
-            ViewBag.BedCountStats = await bookingsGroup.Select(b => new CalcBedCountStats { BedCount = b.Key, NoOfBookings = b.Count() }).ToListAsync();
-
-
-
-            return View();
-        }
+       
         [Authorize]
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
