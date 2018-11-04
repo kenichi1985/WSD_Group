@@ -131,7 +131,8 @@ namespace WebHotel.Controllers
         public IActionResult Create()
         {
             string _email = User.FindFirst(ClaimTypes.Name).Value;
-            ViewData["CustomerEmail"] = _email;
+            ViewData["CustomerEmail"] = new SelectList(_context.Customer, "Email", "Email");
+            ViewData["LoginedCustomerEmail"] = _email;
             ViewData["RoomID"] = new SelectList(_context.Room, "ID", "ID");
             return View();
         }

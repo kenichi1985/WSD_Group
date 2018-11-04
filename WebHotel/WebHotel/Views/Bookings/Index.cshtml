@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<WebHotel.Models.Booking>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Booking";
 }
 
 @if (User.IsInRole("Customers"))
 {
 
-    <h2>Index</h2>
+    <h2>My Booking</h2>
 
     <p>
         <a asp-action="Create">Create New</a>
@@ -56,7 +56,7 @@
                     </td>
                     
                     <td>
-                        @Html.DisplayFor(modelItem => item.Cost)
+                        $ @Html.DisplayFor(modelItem => item.Cost)
                     </td>
                 </tr>
             }
@@ -65,10 +65,7 @@
 }
 @if (User.IsInRole("Administrators"))
 {
-
-
-
-    <h2>Index</h2>
+    <h2>All Bookings</h2>
 
     <p>
         <a asp-action="Create">Create New</a>

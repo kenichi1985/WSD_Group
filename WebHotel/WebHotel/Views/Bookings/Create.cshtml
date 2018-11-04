@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create Booking</h2>
+<h2>Book a Room</h2>
 
 <hr />
 <div class="row">
@@ -16,7 +16,17 @@
                 <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
             </div>
             <div class="form-group">
-                <input asp-for="CustomerEmail" value=@ViewData["CustomerEmail"] type="hidden">
+                @if (User.IsInRole("Administrators"))
+                {
+                    <label asp-for="CustomerEmail" class="control-label"></label>
+                    <select asp-for="CustomerEmail" class="form-control" asp-items="ViewBag.CustomerEmail"></select>
+
+                }
+                else
+                {
+                    <input asp-for="CustomerEmail" value=@ViewData["LoginedCustomerEmail"] type="hidden">
+                }
+
             </div>
             <div class="form-group">
                 <label asp-for="CheckIn" class="control-label"></label>
@@ -28,11 +38,6 @@
                 <input asp-for="CheckOut" class="form-control" value="@DateTime.Today" />
                 <span asp-validation-for="CheckOut" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                    <label asp-for="Cost" class="control-label"></label>
-                    <input asp-for="Cost" class="form-control" />
-                    <span asp-validation-for="Cost" class="text-danger"></span>
-                </div>*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
