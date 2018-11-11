@@ -1,0 +1,106 @@
+﻿@model WebHotel.Models.RoomAvailabilityViewModels.RoomAvailability
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Search Room</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Rooms" asp-action="Index" class="form-group" method="get">
+    <div class="form-group">
+        <label class="control-label">Number Of Bed(s):</label>
+        <select name="BedCount" class="form-control">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+
+    </div>
+    <div class="form-group">
+        <label asp-for="CheckIn" class="control-label"></label>
+        <input asp-for="CheckIn" class="form-control" value="@DateTime.Today"/>
+        <span asp-validation-for="CheckIn" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CheckOut" class="control-label"></label>
+        <input asp-for="CheckOut" class="form-control" value="@DateTime.Today/>
+        <span asp-validation-for="CheckOut" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Search" class="btn" />
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Room ID</th>
+            <th>Room Level</th>
+            <th>Bed Count</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    @if (ViewBag.Result != null)
+    {
+
+        <tbody>
+            @foreach (var item in ViewBag.Result)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Level</td>
+                    <td>@item.BedCount</td>
+                    <td>@item.Price</td>
+                </tr>
+
+            }
+
+        </tbody>
+    }
+</table>
+
+
+
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Level)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BedCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Level)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BedCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

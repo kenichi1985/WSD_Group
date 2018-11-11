@@ -1,0 +1,117 @@
+﻿@model IEnumerable<WebHotel.Models.Booking>
+
+@{
+    ViewData["Title"] = "Booking";
+}
+
+@if (User.IsInRole("Customers"))
+{
+
+    <h2>My Booking</h2>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortorder="@ViewData["SortSurname"]">Surname</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortorder="@ViewData["SortGivenName"]">Given Name</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortorder="@ViewData["SortRoom"]">Room</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortorder="@ViewData["SortCheckIn"]">Check In Date</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortorder="@ViewData["SortCheckOut"]">Check Out Date</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortorder="@ViewData["SortCost"]">Cost</a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TheCustomer.Surname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TheCustomer.GivenName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckIn)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CheckOut)
+                    </td>
+                    
+                    <td>
+                        $ @Html.DisplayFor(modelItem => item.Cost)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (User.IsInRole("Administrators"))
+{
+    <h2>All Bookings</h2>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoomID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TheCustomer.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckIn)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CheckOut)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TheCustomer.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckIn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckOut)
+                </td>
+                
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+}

@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h1>Statistics</h1>
+
+<div>
+    <h2>Customer Distribution with respect to postcodes </h2>
+    <br />
+    <div>
+        <table class="table">
+        
+            <tr>
+                <th>
+                    Postcode
+                </th>
+                <th>
+                    Number of Bookings
+                </th>
+            </tr>
+
+            @foreach (var item in ViewBag.PostcodeStats)
+            {
+                <tr>
+                    <td>
+                        @item.PostcodeOfCustomer
+                    </td>
+                    <td>
+                        @item.NoOfCustomer
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div>
+    <h2>Booking Distribution with respect to Room ID </h2>
+
+    <h2></h2>
+    <br />
+
+    <div>
+        <table class="table">
+            
+            <tr>
+                <th>
+                    RoomID
+                </th>
+                <th>
+                    Number of Bookings
+                </th>
+            </tr>
+
+            @foreach (var item in ViewBag.RoomIDStats)
+            {
+                <tr>
+                    <td>
+                        @item.RoomID
+                    </td>
+                    <td>
+                        @item.NoOfBookings
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>
+<div>
+    <h2>Booking Distribution with respect to Bed Count</h2>
+
+    <br/>
+
+    <div>
+        <table class="table">
+
+            <tr>
+                <th>
+                    Bed Count
+                </th>
+                <th>
+                    Number of Bookings
+                </th>
+            </tr>
+
+            @foreach (var item in ViewBag.BedCountStats)
+            {
+                <tr>
+                    <td>
+                        @item.BedCount
+                    </td>
+                    <td>
+                        @item.NoOfBookings
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>
+

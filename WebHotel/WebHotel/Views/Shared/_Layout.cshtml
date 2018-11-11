@@ -31,10 +31,23 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Details">My Details</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Search">Search Rooms</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Book">Book A Room</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="MyBooking">My Bookings</a></li>
+                    @if (User.IsInRole("Customers"))
+
+
+                      {
+                <li><a asp-area="" asp-controller="Customers" asp-action="MyDetails">My Details</a></li>
+                <li><a asp-area="" asp-controller="Rooms" asp-action="Index">Search Rooms</a></li>
+                <li><a asp-area="" asp-controller="Bookings" asp-action="Create">Book A Room</a></li>
+                <li><a asp-area="" asp-controller="Bookings"asp-action="Index">My Bookings</a></li>
+                       }
+
+
+                    @if (User.IsInRole("Administrators"))
+                    {
+                        <li><a asp-area="" asp-controller="Bookings" asp-action="Index">Manage Bookings </a></li>
+                        <li><a asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a></li>
+                    }
+
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

@@ -1,0 +1,68 @@
+﻿@model WebHotel.Models.Booking
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Book a Room</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RoomID" class="control-label"></label>
+                <select asp-for="RoomID" class="form-control" asp-items="ViewBag.RoomID"></select>
+            </div>
+            <div class="form-group">
+                @if (User.IsInRole("Administrators"))
+                {
+                    <label asp-for="CustomerEmail" class="control-label"></label>
+                    <select asp-for="CustomerEmail" class="form-control" asp-items="ViewBag.CustomerEmail"></select>
+
+                }
+                else
+                {
+                    <input asp-for="CustomerEmail" value=@ViewData["LoginedCustomerEmail"] type="hidden">
+                }
+
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckIn" class="control-label"></label>
+                <input asp-for="CheckIn" class="form-control" value="@DateTime.Today"/>
+                <span asp-validation-for="CheckIn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CheckOut" class="control-label"></label>
+                <input asp-for="CheckOut" class="form-control" value="@DateTime.Today" />
+                <span asp-validation-for="CheckOut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (ViewBag.Success != null)
+{
+<div>
+    <hr />
+    <h4> @ViewBag.Message</h4>
+    <h4> @ViewBag.Message2</h4>
+    <h4> @ViewBag.Message3</h4>
+    <h4> @ViewBag.Message4</h4>
+    <h4> @ViewBag.Message5</h4>
+</div>
+}
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

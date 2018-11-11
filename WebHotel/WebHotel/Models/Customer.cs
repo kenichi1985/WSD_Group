@@ -18,6 +18,7 @@ namespace WebHotel.Models
         public string Surname { get; set; }
         [Required]
         [RegularExpression(@"^[a-zA-Z'-]{2,20}$", ErrorMessage = "The Surname field only within 2 to 20, and only accpect letters, ' and - ")]
+        [Display(Name = "Given Name")]
         public string GivenName { get; set; }
         [Required]
         [RegularExpression(@"^[0-9]{4}$", ErrorMessage = "The post code only 4 digits")]

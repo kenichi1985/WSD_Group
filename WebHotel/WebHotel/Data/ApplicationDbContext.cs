@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebHotel.Models;
+using WebHotel.Models.StatisticsViewModels;
 
 namespace WebHotel.Data
 {
@@ -22,5 +23,13 @@ namespace WebHotel.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<WebHotel.Models.Room> Room { get; set; }
+
+        public DbSet<WebHotel.Models.Customer> Customer { get; set; }
+
+        public DbSet<WebHotel.Models.Booking> Booking { get; set; }
+
+        public DbSet<WebHotel.Models.StatisticsViewModels.CalcPostcodeStats> CalcPostcodeStats { get; set; }
     }
 }
